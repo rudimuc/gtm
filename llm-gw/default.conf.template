@@ -1,0 +1,108 @@
+# Gateway zu OpenRouter. Der nginx-Container ersetzt ${OPENROUTER_KEY_N} beim Start
+# aus seinen Umgebungsvariablen. In n8n liegt nur ein Platzhalter-Key.
+server {
+  listen 8080;
+
+  location = /healthz { return 200 'ok'; }
+
+  location /gtm1/api/v1/ {
+    proxy_http_version 1.1;
+    proxy_ssl_server_name on;
+    proxy_buffering off;
+    proxy_read_timeout 300s;
+    proxy_set_header Connection "";
+    proxy_set_header Host openrouter.ai;
+    proxy_set_header Authorization "Bearer ${OPENROUTER_KEY_1}";
+    proxy_pass https://openrouter.ai/api/v1/;
+  }
+
+  location /gtm2/api/v1/ {
+    proxy_http_version 1.1;
+    proxy_ssl_server_name on;
+    proxy_buffering off;
+    proxy_read_timeout 300s;
+    proxy_set_header Connection "";
+    proxy_set_header Host openrouter.ai;
+    proxy_set_header Authorization "Bearer ${OPENROUTER_KEY_2}";
+    proxy_pass https://openrouter.ai/api/v1/;
+  }
+
+  location /gtm3/api/v1/ {
+    proxy_http_version 1.1;
+    proxy_ssl_server_name on;
+    proxy_buffering off;
+    proxy_read_timeout 300s;
+    proxy_set_header Connection "";
+    proxy_set_header Host openrouter.ai;
+    proxy_set_header Authorization "Bearer ${OPENROUTER_KEY_3}";
+    proxy_pass https://openrouter.ai/api/v1/;
+  }
+
+  location /gtm4/api/v1/ {
+    proxy_http_version 1.1;
+    proxy_ssl_server_name on;
+    proxy_buffering off;
+    proxy_read_timeout 300s;
+    proxy_set_header Connection "";
+    proxy_set_header Host openrouter.ai;
+    proxy_set_header Authorization "Bearer ${OPENROUTER_KEY_4}";
+    proxy_pass https://openrouter.ai/api/v1/;
+  }
+
+  location /gtm5/api/v1/ {
+    proxy_http_version 1.1;
+    proxy_ssl_server_name on;
+    proxy_buffering off;
+    proxy_read_timeout 300s;
+    proxy_set_header Connection "";
+    proxy_set_header Host openrouter.ai;
+    proxy_set_header Authorization "Bearer ${OPENROUTER_KEY_5}";
+    proxy_pass https://openrouter.ai/api/v1/;
+  }
+
+  location /gtm6/api/v1/ {
+    proxy_http_version 1.1;
+    proxy_ssl_server_name on;
+    proxy_buffering off;
+    proxy_read_timeout 300s;
+    proxy_set_header Connection "";
+    proxy_set_header Host openrouter.ai;
+    proxy_set_header Authorization "Bearer ${OPENROUTER_KEY_6}";
+    proxy_pass https://openrouter.ai/api/v1/;
+  }
+
+  location /gtm7/api/v1/ {
+    proxy_http_version 1.1;
+    proxy_ssl_server_name on;
+    proxy_buffering off;
+    proxy_read_timeout 300s;
+    proxy_set_header Connection "";
+    proxy_set_header Host openrouter.ai;
+    proxy_set_header Authorization "Bearer ${OPENROUTER_KEY_7}";
+    proxy_pass https://openrouter.ai/api/v1/;
+  }
+
+  location /gtm8/api/v1/ {
+    proxy_http_version 1.1;
+    proxy_ssl_server_name on;
+    proxy_buffering off;
+    proxy_read_timeout 300s;
+    proxy_set_header Connection "";
+    proxy_set_header Host openrouter.ai;
+    proxy_set_header Authorization "Bearer ${OPENROUTER_KEY_8}";
+    proxy_pass https://openrouter.ai/api/v1/;
+  }
+
+  location /gtm9/api/v1/ {
+    proxy_http_version 1.1;
+    proxy_ssl_server_name on;
+    proxy_buffering off;
+    proxy_read_timeout 300s;
+    proxy_set_header Connection "";
+    proxy_set_header Host openrouter.ai;
+    proxy_set_header Authorization "Bearer ${OPENROUTER_KEY_9}";
+    proxy_pass https://openrouter.ai/api/v1/;
+  }
+
+  location / { return 403; }
+}
