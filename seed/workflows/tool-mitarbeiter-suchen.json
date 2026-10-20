@@ -11,6 +11,10 @@
             {
               "name": "name",
               "type": "string"
+            },
+            {
+              "name": "abteilung",
+              "type": "string"
             }
           ]
         }
@@ -33,6 +37,10 @@
             {
               "name": "name",
               "value": "={{ $json.name }}"
+            },
+            {
+              "name": "abteilung",
+              "value": "={{ $json.abteilung }}"
             }
           ]
         },
@@ -49,7 +57,7 @@
     },
     {
       "parameters": {
-        "content": "Dieser Workflow ist ein **Tool** für den Agenten. Er bekommt `name` und fragt das Verzeichnis ab. Nichts ändern nötig.",
+        "content": "Dieser Workflow ist ein **Tool** für den Agenten. Er bekommt `name` und/oder `abteilung` und fragt das Verzeichnis ab. Nichts ändern nötig.",
         "height": 120,
         "width": 420,
         "color": 4

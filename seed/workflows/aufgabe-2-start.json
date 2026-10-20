@@ -68,7 +68,7 @@
     },
     {
       "parameters": {
-        "description": "Sucht Mitarbeitende im Verzeichnis anhand des Namens (oder Namensteils). Liefert Abteilung, Rolle, E-Mail, Standort.",
+        "description": "Sucht Mitarbeitende im Verzeichnis, entweder nach Namen (oder Namensteil) oder nach Abteilung (IT-Support, Entwicklung, Vertrieb, Personal, Finanzen, Marketing). Nicht benötigte Angaben leer lassen. Liefert Name, Abteilung, Rolle, E-Mail, Standort.",
         "workflowId": {
           "__rl": true,
           "value": "subMitarbeiter",
@@ -77,13 +77,24 @@
         "workflowInputs": {
           "mappingMode": "defineBelow",
           "value": {
-            "name": "={{ $fromAI('name','Name oder Namensteil der gesuchten Person','string') }}"
+            "name": "={{ $fromAI('name','Name oder Namensteil der gesuchten Person; leer lassen, wenn nach einer Abteilung gesucht wird','string','') }}",
+            "abteilung": "={{ $fromAI('abteilung','Abteilung, z. B. IT-Support oder Entwicklung; leer lassen, wenn nach einer Person gesucht wird','string','') }}"
           },
           "matchingColumns": [],
           "schema": [
             {
               "id": "name",
               "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "abteilung",
+              "displayName": "abteilung",
               "required": false,
               "defaultMatch": false,
               "display": true,

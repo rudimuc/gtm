@@ -27,10 +27,14 @@
             {
               "name": "name",
               "valueProvider": "modelOptional"
+            },
+            {
+              "name": "abteilung",
+              "valueProvider": "modelOptional"
             }
           ]
         },
-        "toolDescription": "Sucht Mitarbeitende im Verzeichnis. Eingabe: ein Teil des Namens, z. B. 'Anna'. Liefert Abteilung, Rolle, E-Mail und Standort."
+        "toolDescription": "Sucht Mitarbeitende im Verzeichnis. Entweder nach Namen (Teil des Namens, z. B. 'Anna') oder nach Abteilung (z. B. 'IT-Support', 'Entwicklung', 'Vertrieb', 'Personal', 'Finanzen', 'Marketing'). Nicht benötigte Angaben weglassen. Liefert Name, Abteilung, Rolle, E-Mail und Standort."
       },
       "id": "m2",
       "name": "mitarbeiter_suchen",
