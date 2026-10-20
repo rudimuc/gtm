@@ -63,8 +63,7 @@ Die Gruppen tragen im **MCP Client Tool** ein: `http://tools:5678/mcp/workshop`
   im `bootstrap`-Log ein Fehlercode, und du legst den Owner einmal im Browser an.
 - Der Start über `entrypoint` + `n8n import:credentials` vor dem ersten `n8n start` ist ein
   verbreitetes Muster. Prüfe in `gtm1`, ob das Credential da ist. Wenn nicht, zeigt das Log der Instanz warum.
-- Der Credential-Typ ist `openAiApi` mit Base-URL aufs Gateway. Hat dein n8n einen eigenen
-  OpenRouter-Typ mit URL-Feld, ändere `type` in `seed/credentials.tpl.json`.
+- Der Credential-Typ ist `openRouterApi` (n8n 2.15.0, passt zum Node "OpenRouter Chat Model") mit der Gateway-URL.
 - Alle zehn Hostnamen laufen über einen Traefik-Router und damit über ein Zertifikat.
   Es müssen also alle zehn DNS-Namen auflösen, sonst scheitert das Zertifikat insgesamt.
 - Mehr als 9 Gruppen: einen Service `gtmN`, einen `PW_GTMN`, einen Key und einen Block im Gateway

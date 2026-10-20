@@ -47,6 +47,10 @@ x-tools-command: &tools-command
     if [ ! -f /home/node/.n8n/.seeded ]; then
       if ls /seed/workflows/*.json >/dev/null 2>&1; then
         n8n import:workflow --separate --input=/seed/workflows
+        # Mock-API und MCP-Server müssen aktiv sein (Production-Webhooks)
+        for id in $$(n8n list:workflow | sed -n 's/^\([^|]*\)|.*/\1/p'); do
+          n8n publish:workflow --id="$$id"
+        done
       fi
       touch /home/node/.n8n/.seeded
     fi

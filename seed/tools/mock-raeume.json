@@ -1,0 +1,54 @@
+{
+  "id": "mockRaeume",
+  "name": "Mock-API: Freie Räume",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "raeume",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "w1",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "mock-raeume"
+    },
+    {
+      "parameters": {
+        "jsCode": "const alle = [{\"raum\": \"Alpen\", \"plaetze\": 12, \"ausstattung\": [\"Beamer\", \"Videokonferenz\"], \"frei\": true}, {\"raum\": \"Isar\", \"plaetze\": 6, \"ausstattung\": [\"Whiteboard\"], \"frei\": true}, {\"raum\": \"Marienplatz\", \"plaetze\": 20, \"ausstattung\": [\"Beamer\", \"Whiteboard\", \"Videokonferenz\"], \"frei\": false}, {\"raum\": \"Viktualienmarkt\", \"plaetze\": 4, \"ausstattung\": [\"Bildschirm\"], \"frei\": true}];\nconst q = ($input.first().json.query || {});\nlet treffer = alle.filter(r => r.frei);\nif (q.plaetze) treffer = treffer.filter(r => r.plaetze >= Number(q.plaetze));\nreturn [{ json: { anzahl: treffer.length, raeume: treffer } }];"
+      },
+      "id": "c1",
+      "name": "Daten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Daten",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

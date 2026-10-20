@@ -1,0 +1,123 @@
+{
+  "id": "mcpWorkshop",
+  "name": "MCP-Server: Workshop-Tools",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "path": "workshop"
+      },
+      "id": "m1",
+      "name": "MCP Server Trigger",
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "mcp-workshop"
+    },
+    {
+      "parameters": {
+        "name": "mitarbeiter_suchen",
+        "url": "http://localhost:5678/webhook/mitarbeiter",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {
+              "name": "name",
+              "valueProvider": "modelOptional"
+            }
+          ]
+        },
+        "toolDescription": "Sucht Mitarbeitende im Verzeichnis. Eingabe: ein Teil des Namens, z. B. 'Anna'. Liefert Abteilung, Rolle, E-Mail und Standort."
+      },
+      "id": "m2",
+      "name": "mitarbeiter_suchen",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -200,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "name": "freie_raeume",
+        "url": "http://localhost:5678/webhook/raeume",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {
+              "name": "plaetze",
+              "valueProvider": "modelOptional"
+            }
+          ]
+        },
+        "toolDescription": "Liefert alle aktuell freien Besprechungsräume. Optional: Mindestanzahl Plätze."
+      },
+      "id": "m3",
+      "name": "freie_raeume",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "name": "wetter_muenchen",
+        "description": "Liefert das Wetter in München (Beispieldaten für den Workshop).",
+        "jsCode": "return 'München: 14 Grad, leicht bewölkt, Regenwahrscheinlichkeit 20 %';"
+      },
+      "id": "m4",
+      "name": "wetter_muenchen",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        200,
+        220
+      ]
+    }
+  ],
+  "connections": {
+    "mitarbeiter_suchen": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "freie_raeume": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wetter_muenchen": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}
