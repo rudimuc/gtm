@@ -26,8 +26,8 @@ n8n -> http://tools:5678/...          -> Mock-API / MCP-Server
    - Tab **Advanced:** "Isolated Deployment" und "Randomize Compose" aus lassen. Sonst kann Dokploy
      den n8n-Containern ein zusätzliches Netz mit Internetzugang anhängen.
    - Keine Einträge im Tab "Domains" nötig: die Traefik-Labels stehen im Compose (Service `edge`).
-4. **Deploy.** Im Log von `bootstrap` steht je Instanz `owner setup HTTP 200`
-   (400 = war schon eingerichtet).
+4. **Deploy.** Im Log von `bootstrap` steht je Instanz die Antwort von n8n mit `[HTTP 200]`
+   (Bei 400 steht der Grund im Text, z. B. Passwort zu schwach: mind. 8 Zeichen, Zahl, Großbuchstabe.)
 5. **Zugang:** `gtmN@workshop.example` bzw. `tools@workshop.example` mit den `PW_*`-Werten.
    Die Werte kannst du als Zettel für die Gruppen ausdrucken.
 

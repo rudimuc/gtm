@@ -126,10 +126,10 @@ services:
             if [ "$$i" -gt 90 ]; then echo "$$name: Timeout"; return; fi
             sleep 3
           done
-          code=$$(curl -s -o /dev/null -w '%{http_code}' -H 'Content-Type: application/json' \
+          out=$$(curl -s -w ' [HTTP %{http_code}]' -H 'Content-Type: application/json' \
             -d "{\"email\":\"$$name@workshop.example\",\"firstName\":\"Workshop\",\"lastName\":\"$$name\",\"password\":\"$$pw\"}" \
             "http://$$name:5678/rest/owner/setup")
-          echo "$$name: owner setup HTTP $$code (200 = angelegt, 400 = schon eingerichtet)"
+          echo "$$name: $$out" | cut -c1-300
         }
         setup gtm1 "$$PW_GTM1"
         setup gtm2 "$$PW_GTM2"
