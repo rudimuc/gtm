@@ -1,0 +1,399 @@
+{
+  "id": "a1Loesung",
+  "name": "Aufgabe 1: Anfrage bearbeiten (Lösung)",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Anfrage an eine Fachabteilung",
+        "formDescription": "Beschreibe kurz dein Anliegen.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Abteilung",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Entwicklung"
+                  },
+                  {
+                    "option": "Vertrieb"
+                  },
+                  {
+                    "option": "Personal"
+                  },
+                  {
+                    "option": "IT-Support"
+                  },
+                  {
+                    "option": "Finanzen"
+                  },
+                  {
+                    "option": "Marketing"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Dringlichkeit",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "niedrig"
+                  },
+                  {
+                    "option": "normal"
+                  },
+                  {
+                    "option": "hoch"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Nachricht",
+              "fieldType": "textarea",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f1",
+      "name": "Anfrage-Formular",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "anfrage"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a-absender",
+              "name": "absender",
+              "value": "={{ $json.Name }}",
+              "type": "string"
+            },
+            {
+              "id": "a-abteilung",
+              "name": "abteilung",
+              "value": "={{ $json.Abteilung }}",
+              "type": "string"
+            },
+            {
+              "id": "a-dringlichkeit",
+              "name": "dringlichkeit",
+              "value": "={{ $json.Dringlichkeit }}",
+              "type": "string"
+            },
+            {
+              "id": "a-nachricht",
+              "name": "nachricht",
+              "value": "={{ $json.Nachricht }}",
+              "type": "string"
+            },
+            {
+              "id": "a-eingegangen",
+              "name": "eingegangen",
+              "value": "={{ $now.toFormat('dd.MM.yyyy HH:mm') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "s1",
+      "name": "Felder aufräumen",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Fasse die folgende Nachricht in einem kurzen deutschen Satz zusammen:\n\n{{ $json.nachricht }}",
+        "batching": {}
+      },
+      "id": "l1",
+      "name": "Zusammenfassung (Bonus)",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini",
+        "options": {}
+      },
+      "id": "l2",
+      "name": "OpenRouter Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        500,
+        220
+      ],
+      "credentials": {
+        "openRouterApi": {
+          "id": "or-workshop",
+          "name": "OpenRouter (Workshop)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "http://tools:5678/webhook/mitarbeiter",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "abteilung",
+              "value": "={{ $('Felder aufräumen').item.json.abteilung }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "h1",
+      "name": "Ansprechperson suchen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        840,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $('Felder aufräumen').item.json.dringlichkeit }}",
+              "rightValue": "hoch",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "i1",
+      "name": "Dringend?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1080,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a-antwort",
+              "name": "antwort",
+              "value": "=DRINGEND: {{ $('Felder aufräumen').item.json.absender }}, deine Anfrage geht sofort an {{ $json.mitarbeiter[0].name }} ({{ $json.mitarbeiter[0].email }}).\nZusammenfassung: {{ $('Zusammenfassung (Bonus)').item.json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "s2",
+      "name": "Antwort dringend",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1320,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a-antwort",
+              "name": "antwort",
+              "value": "=Danke {{ $('Felder aufräumen').item.json.absender }}, {{ $json.mitarbeiter[0].name }} ({{ $json.mitarbeiter[0].rolle }}) meldet sich in den nächsten Tagen.\nZusammenfassung: {{ $('Zusammenfassung (Bonus)').item.json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "s3",
+      "name": "Antwort normal",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1320,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Anfrage eingegangen",
+        "completionMessage": "={{ $json.antwort }}",
+        "options": {}
+      },
+      "id": "e1",
+      "name": "Formular beenden",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        1560,
+        0
+      ],
+      "webhookId": "anfrage-end"
+    },
+    {
+      "parameters": {
+        "content": "## Lösung Aufgabe 1\nTrigger -> Edit Fields -> (Bonus: LLM) -> HTTP Request -> IF -> Antwort -> Formular beenden.",
+        "height": 140,
+        "width": 520,
+        "color": 4
+      },
+      "id": "1",
+      "name": "Notiz 1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -300
+      ]
+    }
+  ],
+  "connections": {
+    "Anfrage-Formular": {
+      "main": [
+        [
+          {
+            "node": "Felder aufräumen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Felder aufräumen": {
+      "main": [
+        [
+          {
+            "node": "Zusammenfassung (Bonus)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Zusammenfassung (Bonus)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Zusammenfassung (Bonus)": {
+      "main": [
+        [
+          {
+            "node": "Ansprechperson suchen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ansprechperson suchen": {
+      "main": [
+        [
+          {
+            "node": "Dringend?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dringend?": {
+      "main": [
+        [
+          {
+            "node": "Antwort dringend",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Antwort normal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Antwort dringend": {
+      "main": [
+        [
+          {
+            "node": "Formular beenden",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Antwort normal": {
+      "main": [
+        [
+          {
+            "node": "Formular beenden",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

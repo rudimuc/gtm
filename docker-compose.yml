@@ -37,6 +37,8 @@ x-team-command: &team-command
       n8n import:credentials --input=/tmp/cred.json
       if ls /seed/workflows/*.json >/dev/null 2>&1; then
         n8n import:workflow --separate --input=/seed/workflows
+        # Sub-Workflow, den der Agent in Aufgabe 2 als Tool aufruft, muss aktiv sein
+        n8n publish:workflow --id=subMitarbeiter
       fi
       touch /home/node/.n8n/.seeded
     fi

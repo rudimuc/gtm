@@ -1,0 +1,118 @@
+{
+  "id": "a1Start",
+  "name": "Aufgabe 1: Anfrage bearbeiten (Start)",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Anfrage an eine Fachabteilung",
+        "formDescription": "Beschreibe kurz dein Anliegen.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Abteilung",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Entwicklung"
+                  },
+                  {
+                    "option": "Vertrieb"
+                  },
+                  {
+                    "option": "Personal"
+                  },
+                  {
+                    "option": "IT-Support"
+                  },
+                  {
+                    "option": "Finanzen"
+                  },
+                  {
+                    "option": "Marketing"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Dringlichkeit",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "niedrig"
+                  },
+                  {
+                    "option": "normal"
+                  },
+                  {
+                    "option": "hoch"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Nachricht",
+              "fieldType": "textarea",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f1",
+      "name": "Anfrage-Formular",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "anfrage"
+    },
+    {
+      "parameters": {
+        "content": "## Aufgabe 1: Anfrage bearbeiten (30 Min.)\nEin Formular nimmt Anfragen an. Der Workflow soll die passende Ansprechperson finden und je nach Dringlichkeit antworten.\n\n**So gehst du vor:**\n1. **Formular testen:** Doppelklick auf den Trigger, *Execute step* (oder unten *Execute workflow*), Formular ausfüllen und abschicken.\n2. **Edit Fields** anhängen: baue sauberes JSON mit `absender`, `abteilung`, `dringlichkeit`, `nachricht`. Beispiel: `{{ $json.Name }}`\n3. **HTTP Request** anhängen: `GET http://tools:5678/webhook/mitarbeiter`, Query-Parameter `abteilung` = die Abteilung aus dem Formular.\n4. **IF** anhängen: ist die Dringlichkeit `hoch`?\n5. Zwei **Edit Fields** (je ein Zweig) bauen den Antworttext in ein Feld `antwort`.\n6. **Form** (Operation *Form Ending*) zeigt `{{ $json.antwort }}` an.\n\n**Tipp:** Den Trigger einmal ausführen und *anpinnen* (Pin), dann musst du das Formular nicht jedes Mal ausfüllen.\nHilfe: die Hilfekarte, oder Rudi fragen.",
+        "height": 380,
+        "width": 520,
+        "color": 4
+      },
+      "id": "1",
+      "name": "Notiz 1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Bonus\nBaue einen **Basic LLM Chain**-Node ein, der die Nachricht in einem Satz zusammenfasst. Als Modell: **OpenRouter Chat Model** mit dem Credential *OpenRouter (Workshop)*, Modell z. B. `openai/gpt-4o-mini`.",
+        "height": 150,
+        "width": 520,
+        "color": 6
+      },
+      "id": "2",
+      "name": "Notiz 2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        260
+      ]
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

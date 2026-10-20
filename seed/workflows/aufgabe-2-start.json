@@ -1,0 +1,170 @@
+{
+  "id": "a2Start",
+  "name": "Aufgabe 2: Agent (Start)",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "g0",
+      "name": "Chat",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "a2-chat"
+    },
+    {
+      "parameters": {
+        "promptType": "auto",
+        "options": {
+          "systemMessage": "=Du bist ein hilfreicher Assistent."
+        }
+      },
+      "id": "g1",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        300,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini",
+        "options": {}
+      },
+      "id": "g2",
+      "name": "OpenRouter Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        100,
+        260
+      ],
+      "credentials": {
+        "openRouterApi": {
+          "id": "or-workshop",
+          "name": "OpenRouter (Workshop)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "id": "g3",
+      "name": "Window Buffer Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        300,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "description": "Sucht Mitarbeitende im Verzeichnis anhand des Namens (oder Namensteils). Liefert Abteilung, Rolle, E-Mail, Standort.",
+        "workflowId": {
+          "__rl": true,
+          "value": "subMitarbeiter",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $fromAI('name','Name oder Namensteil der gesuchten Person','string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "g4",
+      "name": "Mitarbeiter suchen",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        500,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://tools:5678/mcp/workshop",
+        "serverTransport": "httpStreamable",
+        "authentication": "none",
+        "include": "all",
+        "options": {}
+      },
+      "id": "g5",
+      "name": "MCP Client Tools-Server",
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        720,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Aufgabe 2: Agent mit Tools (25 Min.)\nEin **AI Agent** entscheidet selbst, welche Tools er nutzt. Alle Bausteine liegen schon da, du verbindest sie.\n\n**So gehst du vor:**\n1. **Memory verbinden:** Ziehe vom Kreis *Memory* des AI Agent zum Node *Window Buffer Memory*.\n2. **Tool verbinden:** Ziehe vom Kreis *Tool* zum Node *Mitarbeiter suchen* (ruft den Workflow *Tool: Mitarbeiter suchen* auf).\n3. Teste im Chat (unten *Open chat*): *Wer arbeitet im IT-Support?*\n4. **MCP-Tool verbinden:** Verbinde auch *MCP Client Tools-Server*. Dann kennt der Agent zusätzlich freie Räume und das Wetter. Frage: *Gibt es einen freien Raum für 8 Personen?*\n5. **Systemprompt schreiben:** Öffne den AI Agent, *Add Option -> System Message*. Gib dem Agenten Rolle, Sprache und Regeln. Teste, wie sich seine Antworten ändern.\n\n**Beobachte:** In der Ausführung siehst du, welche Tools der Agent aufruft und mit welchen Eingaben.",
+        "height": 440,
+        "width": 620,
+        "color": 4
+      },
+      "id": "1",
+      "name": "Notiz 1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -520
+      ]
+    }
+  ],
+  "connections": {
+    "Chat": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}
