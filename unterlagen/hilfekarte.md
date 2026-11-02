@@ -10,7 +10,7 @@ Drück auf das Pin-Symbol in der Ausgabe eines Nodes, dann bleiben seine Testdat
 Bei Chat-Modellen im Node *Credential to connect with* **OpenRouter (Workshop)** auswählen. Einen eigenen API-Schlüssel brauchst du nicht. Modellnamen im Format `openai/gpt-4o-mini`.
 
 **4. Nodes verbinden**
-Ein Node ohne Linie zum nächsten läuft nicht mit. Am Agenten hängen Memory, Tools und Modell an den **Kreisen unten**, nicht an den Pfeilen rechts.
+Ein Node ohne Linie zum nächsten läuft nicht mit. Am Agenten hängen Memory, Tools und Modell an den **Anschlüssen unten** (jeweils mit **Plus-Zeichen**), nicht an den Pfeilen rechts.
 
 **5. Test oder Produktion**
 *Execute workflow* ist ein Test mit Ansicht der Daten. Die **Production-URL** eines Formulars oder Webhooks funktioniert nur, wenn der Workflow **aktiv** ist (Schalter oben rechts, *Publish*). Test-URL und Production-URL sind verschieden.
@@ -24,4 +24,5 @@ Ein Node ohne Linie zum nächsten läuft nicht mit. Am Agenten hängen Memory, T
 **Adressen im Workshop**
 - Mitarbeiter-API: `http://tools:5678/webhook/mitarbeiter` (Parameter `name`, `abteilung`)
 - Räume-API: `http://tools:5678/webhook/raeume` (Parameter `plaetze`)
+- Abteilungs-API: `http://tools:5678/webhook/abteilungen` (keine Parameter)
 - MCP-Server: `http://tools:5678/mcp/workshop`

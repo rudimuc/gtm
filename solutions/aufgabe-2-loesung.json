@@ -21,7 +21,7 @@
       "parameters": {
         "promptType": "auto",
         "options": {
-          "systemMessage": "Du bist der Assistent für Mitarbeitende. Antworte immer auf Deutsch, kurz und freundlich. Nutze die Tools, statt zu raten: suche Personen im Verzeichnis, prüfe freie Räume. Wenn ein Tool nichts findet, sag das offen."
+          "systemMessage": "Du bist der Assistent für Mitarbeitende. Antworte immer auf Deutsch, kurz und freundlich. Nutze die Tools, statt zu raten: Wird nach einer Abteilung gefragt (auch mit Kurzform wie „IT“), hole zuerst mit dem Tool für Abteilungen die genauen Namen und such dann die Personen. Prüfe bei Raumfragen die freien Räume. Wenn ein Tool nichts findet, sag das offen."
         }
       },
       "id": "g1",
@@ -68,7 +68,7 @@
     },
     {
       "parameters": {
-        "description": "Sucht Mitarbeitende im Verzeichnis, entweder nach Namen (oder Namensteil) oder nach Abteilung (IT-Support, Entwicklung, Vertrieb, Personal, Finanzen, Marketing). Nicht benötigte Angaben leer lassen. Liefert Name, Abteilung, Rolle, E-Mail, Standort.",
+        "description": "Sucht Mitarbeitende im Verzeichnis, entweder nach Namen (oder Namensteil) oder nach Abteilung. Der Abteilungsname muss genau stimmen, hole ihn vorher mit dem Tool 'abteilungen_auflisten'. Nicht benötigte Angaben leer lassen. Liefert Name, Abteilung, Rolle, E-Mail, Standort.",
         "workflowId": {
           "__rl": true,
           "value": "subMitarbeiter",
@@ -78,7 +78,7 @@
           "mappingMode": "defineBelow",
           "value": {
             "name": "={{ $fromAI('name','Name oder Namensteil der gesuchten Person; leer lassen, wenn nach einer Abteilung gesucht wird','string','') }}",
-            "abteilung": "={{ $fromAI('abteilung','Abteilung, z. B. IT-Support oder Entwicklung; leer lassen, wenn nach einer Person gesucht wird','string','') }}"
+            "abteilung": "={{ $fromAI('abteilung','Genauer Abteilungsname aus dem Tool 'abteilungen_auflisten'; leer lassen, wenn nach einer Person gesucht wird','string','') }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -128,6 +128,21 @@
       "name": "MCP Client Tools-Server",
       "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
       "typeVersion": 1.2,
+      "position": [
+        940,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "name": "abteilungen_auflisten",
+        "url": "http://tools:5678/webhook/abteilungen",
+        "toolDescription": "Liefert alle Abteilungen der Firma mit den genauen Namen und einer Kurzbeschreibung. Rufe dieses Tool zuerst auf, wenn nach einer Abteilung gefragt wird, und nimm den genauen Namen für die Personensuche."
+      },
+      "id": "g7",
+      "name": "Abteilungen auflisten",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
       "position": [
         720,
         260
@@ -180,6 +195,17 @@
       ]
     },
     "MCP Client Tools-Server": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Abteilungen auflisten": {
       "ai_tool": [
         [
           {

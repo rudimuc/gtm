@@ -68,7 +68,7 @@
     },
     {
       "parameters": {
-        "description": "Sucht Mitarbeitende im Verzeichnis, entweder nach Namen (oder Namensteil) oder nach Abteilung (IT-Support, Entwicklung, Vertrieb, Personal, Finanzen, Marketing). Nicht benötigte Angaben leer lassen. Liefert Name, Abteilung, Rolle, E-Mail, Standort.",
+        "description": "Sucht Mitarbeitende im Verzeichnis, entweder nach Namen (oder Namensteil) oder nach Abteilung. Der Abteilungsname muss genau stimmen, hole ihn vorher mit dem Tool 'abteilungen_auflisten'. Nicht benötigte Angaben leer lassen. Liefert Name, Abteilung, Rolle, E-Mail, Standort.",
         "workflowId": {
           "__rl": true,
           "value": "subMitarbeiter",
@@ -78,7 +78,7 @@
           "mappingMode": "defineBelow",
           "value": {
             "name": "={{ $fromAI('name','Name oder Namensteil der gesuchten Person; leer lassen, wenn nach einer Abteilung gesucht wird','string','') }}",
-            "abteilung": "={{ $fromAI('abteilung','Abteilung, z. B. IT-Support oder Entwicklung; leer lassen, wenn nach einer Person gesucht wird','string','') }}"
+            "abteilung": "={{ $fromAI('abteilung','Genauer Abteilungsname aus dem Tool 'abteilungen_auflisten'; leer lassen, wenn nach einer Person gesucht wird','string','') }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -129,15 +129,15 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
       "typeVersion": 1.2,
       "position": [
-        720,
+        940,
         260
       ]
     },
     {
       "parameters": {
-        "content": "## Aufgabe 2: Agent mit Tools (25 Min.)\nEin **AI Agent** entscheidet selbst, welche Tools er nutzt. Alle Bausteine liegen schon da, du verbindest sie.\n\n**So gehst du vor:**\n1. **Memory verbinden:** Ziehe vom Kreis *Memory* des AI Agent zum Node *Window Buffer Memory*.\n2. **Tool verbinden:** Ziehe vom Kreis *Tool* zum Node *Mitarbeiter suchen* (ruft den Workflow *Tool: Mitarbeiter suchen* auf).\n3. Teste im Chat (unten *Open chat*): *Wer arbeitet im IT-Support?*\n4. **MCP-Tool verbinden:** Verbinde auch *MCP Client Tools-Server*. Dann kennt der Agent zusätzlich freie Räume und das Wetter. Frage: *Gibt es einen freien Raum für 8 Personen?*\n5. **Systemprompt schreiben:** Öffne den AI Agent, *Add Option -> System Message*. Gib dem Agenten Rolle, Sprache und Regeln. Teste, wie sich seine Antworten ändern.\n\n**Beobachte:** In der Ausführung siehst du, welche Tools der Agent aufruft und mit welchen Eingaben.",
-        "height": 440,
-        "width": 620,
+        "content": "## Aufgabe 2: Agent mit Tools (25 Min.)\nEin **AI Agent** entscheidet selbst, welche Tools er nutzt. Alle Bausteine liegen schon da, du verbindest sie.\n\n**So gehst du vor:**\n1. **Memory verbinden:** Klicke am AI Agent beim Anschluss *Memory* auf das **Plus-Zeichen** und wähle *Window Buffer Memory*. Oder ziehe vom Plus-Zeichen zum fertigen Node.\n2. **Tool verbinden:** Am Anschluss *Tool* auf das **Plus-Zeichen**, dann den Node *Mitarbeiter suchen* (ruft den Workflow *Tool: Mitarbeiter suchen* auf).\n3. Teste im Chat (unten *Open chat*): *Wer arbeitet im IT-Support?*\n4. **Zweites Tool:** Verbinde *Abteilungen auflisten*. Der Agent kann nun die genauen Abteilungsnamen nachschlagen. Teste: *Wer arbeitet in der IT?* und schau in der Ausführung, in welcher Reihenfolge er die Tools aufruft.\n5. **MCP-Tool verbinden:** Verbinde auch *MCP Client Tools-Server*. Dann kennt der Agent zusätzlich freie Räume und das Wetter. Frage: *Gibt es einen freien Raum für 8 Personen?*\n6. **Systemprompt schreiben:** Öffne den AI Agent, *Add Option -> System Message*. Gib dem Agenten Rolle, Sprache und Regeln. Teste, wie sich seine Antworten ändern.\n\n**Beobachte:** In der Ausführung siehst du, welche Tools der Agent aufruft und mit welchen Eingaben.",
+        "height": 520,
+        "width": 760,
         "color": 4
       },
       "id": "1",
@@ -147,6 +147,21 @@
       "position": [
         -60,
         -520
+      ]
+    },
+    {
+      "parameters": {
+        "name": "abteilungen_auflisten",
+        "url": "http://tools:5678/webhook/abteilungen",
+        "toolDescription": "Liefert alle Abteilungen der Firma mit den genauen Namen und einer Kurzbeschreibung. Rufe dieses Tool zuerst auf, wenn nach einer Abteilung gefragt wird, und nimm den genauen Namen für die Personensuche."
+      },
+      "id": "g7",
+      "name": "Abteilungen auflisten",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        260
       ]
     }
   ],

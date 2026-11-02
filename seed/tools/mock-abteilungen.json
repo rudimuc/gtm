@@ -1,0 +1,54 @@
+{
+  "id": "mockAbteilungen",
+  "name": "Mock-API: Abteilungen",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "abteilungen",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "w1",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "mock-abteilungen"
+    },
+    {
+      "parameters": {
+        "jsCode": "const abteilungen = [\n  { abteilung: 'Entwicklung', beschreibung: 'Software, Technik, Betrieb der Anwendungen' },\n  { abteilung: 'Vertrieb', beschreibung: 'Kunden, Angebote, Verträge' },\n  { abteilung: 'Personal', beschreibung: 'Recruiting, Arbeitsrecht, Urlaub' },\n  { abteilung: 'IT-Support', beschreibung: 'Arbeitsplätze, Netzwerk, Microsoft 365, VPN' },\n  { abteilung: 'Finanzen', beschreibung: 'Budget, Rechnungen, Controlling' },\n  { abteilung: 'Marketing', beschreibung: 'Texte, Website, Kampagnen' },\n];\nreturn [{ json: { anzahl: abteilungen.length, abteilungen } }];"
+      },
+      "id": "c1",
+      "name": "Daten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Daten",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}
