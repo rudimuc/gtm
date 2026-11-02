@@ -34,6 +34,8 @@ x-env: &env
   N8N_HIRING_BANNER_ENABLED: "false"
   N8N_PERSONALIZATION_ENABLED: "false"
   N8N_COMMUNITY_PACKAGES_ENABLED: "false"
+  # Registry-Abruf von api.n8n.io schlägt ohne Internet alle 8 h mit langem Stacktrace fehl
+  N8N_DISABLED_MODULES: mcp-registry
   N8N_BLOCK_ENV_ACCESS_IN_NODE: "true"
   EXECUTIONS_DATA_PRUNE: "true"
   EXECUTIONS_DATA_MAX_AGE: "168"
