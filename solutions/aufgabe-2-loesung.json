@@ -68,7 +68,7 @@
     },
     {
       "parameters": {
-        "description": "Sucht Mitarbeitende im Verzeichnis, entweder nach Namen (oder Namensteil) oder nach Abteilung. Der Abteilungsname muss genau stimmen, hole ihn vorher mit dem Tool 'abteilungen_auflisten'. Nicht benötigte Angaben leer lassen. Liefert Name, Abteilung, Rolle, E-Mail, Standort.",
+        "description": "Sucht Mitarbeitende im Verzeichnis, entweder nach Namen (oder Namensteil) oder nach Abteilung. Der Abteilungsname muss genau stimmen, hole ihn vorher mit dem Tool abteilungen_auflisten. Nicht benötigte Angaben leer lassen. Liefert Name, Abteilung, Rolle, E-Mail, Standort.",
         "workflowId": {
           "__rl": true,
           "value": "subMitarbeiter",
@@ -78,7 +78,7 @@
           "mappingMode": "defineBelow",
           "value": {
             "name": "={{ $fromAI('name','Name oder Namensteil der gesuchten Person; leer lassen, wenn nach einer Abteilung gesucht wird','string','') }}",
-            "abteilung": "={{ $fromAI('abteilung','Genauer Abteilungsname aus dem Tool 'abteilungen_auflisten'; leer lassen, wenn nach einer Person gesucht wird','string','') }}"
+            "abteilung": "={{ $fromAI('abteilung','Genauer Abteilungsname aus dem Tool abteilungen_auflisten; leer lassen, wenn nach einer Person gesucht wird','string','') }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -135,14 +135,25 @@
     },
     {
       "parameters": {
-        "name": "abteilungen_auflisten",
-        "url": "http://tools:5678/webhook/abteilungen",
-        "toolDescription": "Liefert alle Abteilungen der Firma mit den genauen Namen und einer Kurzbeschreibung. Rufe dieses Tool zuerst auf, wenn nach einer Abteilung gefragt wird, und nimm den genauen Namen für die Personensuche."
+        "description": "Liefert alle Abteilungen der Firma mit den genauen Namen und einer Kurzbeschreibung. Rufe dieses Tool zuerst auf, wenn nach einer Abteilung gefragt wird, und nimm den genauen Namen für die Personensuche.",
+        "workflowId": {
+          "__rl": true,
+          "value": "subAbteilungen",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
       },
       "id": "g7",
       "name": "Abteilungen auflisten",
-      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
-      "typeVersion": 1.1,
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
       "position": [
         720,
         260

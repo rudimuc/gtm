@@ -1,0 +1,67 @@
+{
+  "id": "subAbteilungen",
+  "name": "Tool: Abteilungen auflisten",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "t1",
+      "name": "Aufruf durch Agent",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "http://tools:5678/webhook/abteilungen",
+        "options": {}
+      },
+      "id": "t2",
+      "name": "Abteilungen abfragen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "Dieser Workflow ist ein **Tool** für den Agenten. Er braucht keine Eingaben und liefert die Liste aller Abteilungen. Nichts ändern nötig.",
+        "height": 120,
+        "width": 420,
+        "color": 4
+      },
+      "id": "1",
+      "name": "Notiz 1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -20,
+        -200
+      ]
+    }
+  ],
+  "connections": {
+    "Aufruf durch Agent": {
+      "main": [
+        [
+          {
+            "node": "Abteilungen abfragen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}
