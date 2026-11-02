@@ -51,6 +51,20 @@ Auf der Tools-Instanz einen Workflow mit **MCP Server Trigger** bauen (Pfad z. B
 Die Gruppen tragen im **MCP Client Tool** ein: `http://tools:5678/mcp/workshop`
 (Transport je nach n8n-Version SSE oder HTTP Streamable).
 
+## Logs im Schulungsbetrieb (Dokploy -> Compose -> Logs, Service wählen)
+- **`gtmN` / `tools`** (n8n): Loglevel `debug`, steuerbar mit `N8N_LOG_LEVEL` (`info` oder `warn`, wenn es zu laut wird).
+  Zeigt Workflow-Starts und -Enden, Fehler von Nodes, Webhook-Aufrufe und Seeding (`[seed] ...`).
+  Ausführungen bleiben 7 Tage in der Instanz (Executions-Ansicht), dort steht jeder Node mit Ein- und Ausgabe.
+- **`edge`**: eine Zeile pro Aufruf mit Zeit, Client-IP, Host, Instanz (`team=`), Status, Dauer.
+  `502` heißt, die Instanz ist nicht erreichbar (startet noch, abgestürzt oder RAM-Limit).
+- **`llm-gw`**: eine Zeile pro LLM-Aufruf mit `team=`, Status und Dauer. Es werden nie Keys oder Prompts geloggt.
+  `401` Key ungültig, `402` Kreditlimit leer, `429` Rate-Limit, `502`/`504` OpenRouter nicht erreichbar.
+- **`bootstrap`**: Ergebnis des Owner-Setups je Instanz mit Uhrzeit.
+- Logs rotieren je Container bei 20 MB (5 Dateien).
+- **Nicht im Compose-Log:** Traefik-Zugriffe (Zertifikatsfehler, Routing) stehen im Container `dokploy-traefik`,
+  Speicherknappheit unter Dokploy -> Monitoring. Wird ein n8n-Container wegen `MEM_LIMIT` beendet, siehst du
+  im Log nur einen Neustart. `docker inspect <container> --format '{{.State.OOMKilled}}'` zeigt `true`.
+
 ## Arbeitsspeicher: 10 Instanzen auf 4 GB sind knapp
 - Eine n8n-Instanz braucht im Leerlauf grob 250 MB, unter Last bis etwa 500 MB. Zehn Instanzen
   plus Dokploy, Traefik und die nginx-Container kommen im Leerlauf auf ungefähr 3 bis 3,5 GB.

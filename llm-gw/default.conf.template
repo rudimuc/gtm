@@ -1,7 +1,20 @@
 # Gateway zu OpenRouter. Der nginx-Container ersetzt ${OPENROUTER_KEY_N} beim Start
 # aus seinen Umgebungsvariablen. In n8n liegt nur ein Platzhalter-Key.
+# Gateway-Log: pro Aufruf Gruppe, Pfad, Status und Dauer. Es wird NIE ein Header oder Body
+# geloggt, also auch nie der Key. Typische Status: 401 Key ungültig, 402 Kreditlimit leer,
+# 429 Rate-Limit, 502/504 OpenRouter nicht erreichbar.
+map $uri $gw_team {
+  default unknown;
+  ~^/(?<t>gtm[1-9])/ $t;
+}
+log_format gateway '$time_iso8601 team=$gw_team "$request_method $uri" status=$status '
+                   'req_bytes=$request_length resp_bytes=$bytes_sent rt=$request_time '
+                   'urt=$upstream_response_time ust=$upstream_status ua="$http_user_agent"';
+error_log /dev/stderr info;
+
 server {
   listen 8080;
+  access_log /dev/stdout gateway;
 
   location = /healthz { return 200 'ok'; }
 

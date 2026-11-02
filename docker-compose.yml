@@ -3,11 +3,20 @@
 # Netz ohne Internet. Raus geht es ausschließlich über das Gateway (llm-gw) zu OpenRouter.
 # Rein kommt man nur über "edge" (nginx), das Traefik von Dokploy bedient.
 
+# Log-Rotation, damit ausführliche Logs (debug) die Platte nicht füllen.
+# Dokploy zeigt diese Logs im Tab "Logs" je Service an.
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "20m"
+    max-file: "5"
+
 x-n8n: &n8n
   image: docker.n8n.io/n8nio/n8n:${N8N_VERSION:-latest}
   restart: unless-stopped
   mem_limit: ${MEM_LIMIT:-512m}
   networks: [internal]
+  logging: *logging
   entrypoint: ["/bin/sh", "-c"]
 
 x-env: &env
@@ -16,6 +25,9 @@ x-env: &env
   N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY:?N8N_ENCRYPTION_KEY fehlt}
   N8N_PROTOCOL: https
   N8N_PROXY_HOPS: "2"
+  N8N_LOG_LEVEL: ${N8N_LOG_LEVEL:-debug}
+  N8N_LOG_OUTPUT: console
+  N8N_LOG_FORMAT: text
   N8N_DIAGNOSTICS_ENABLED: "false"
   N8N_VERSION_NOTIFICATIONS_ENABLED: "false"
   N8N_TEMPLATES_ENABLED: "false"
@@ -24,7 +36,7 @@ x-env: &env
   N8N_COMMUNITY_PACKAGES_ENABLED: "false"
   N8N_BLOCK_ENV_ACCESS_IN_NODE: "true"
   EXECUTIONS_DATA_PRUNE: "true"
-  EXECUTIONS_DATA_MAX_AGE: "24"
+  EXECUTIONS_DATA_MAX_AGE: "168"
   NODE_OPTIONS: --max-old-space-size=384
   NODES_EXCLUDE: '["n8n-nodes-base.executeCommand","n8n-nodes-base.ssh","n8n-nodes-base.readWriteFile","n8n-nodes-base.localFileTrigger"]'
 
@@ -32,7 +44,9 @@ x-env: &env
 # Marker .seeded verhindert, dass ein Neustart Änderungen der Teilnehmer überschreibt.
 x-team-command: &team-command
   - |
+    echo "[seed] $${TEAM}: Start $$(date '+%F %T')"
     if [ ! -f /home/node/.n8n/.seeded ]; then
+      echo "[seed] $${TEAM}: erster Start, importiere Credential und Workflows"
       sed "s/__TEAM__/$${TEAM}/g" /seed/credentials.tpl.json > /tmp/cred.json
       n8n import:credentials --input=/tmp/cred.json
       if ls /seed/workflows/*.json >/dev/null 2>&1; then
@@ -41,12 +55,17 @@ x-team-command: &team-command
         n8n publish:workflow --id=subMitarbeiter
       fi
       touch /home/node/.n8n/.seeded
+      echo "[seed] $${TEAM}: Seeding fertig"
+    else
+      echo "[seed] $${TEAM}: bereits geseedet, überspringe Import"
     fi
     exec n8n start
 
 x-tools-command: &tools-command
   - |
+    echo "[seed] tools: Start $$(date '+%F %T')"
     if [ ! -f /home/node/.n8n/.seeded ]; then
+      echo "[seed] tools: erster Start, importiere Workflows"
       if ls /seed/workflows/*.json >/dev/null 2>&1; then
         n8n import:workflow --separate --input=/seed/workflows
         # Mock-API und MCP-Server müssen aktiv sein (Production-Webhooks)
@@ -55,6 +74,9 @@ x-tools-command: &tools-command
         done
       fi
       touch /home/node/.n8n/.seeded
+      echo "[seed] tools: Seeding fertig"
+    else
+      echo "[seed] tools: bereits geseedet, überspringe Import"
     fi
     exec n8n start
 
@@ -68,6 +90,7 @@ services:
     volumes:
       - ./edge/default.conf:/etc/nginx/conf.d/default.conf:ro
     networks: [internal, dokploy-network]
+    logging: *logging
     labels:
       traefik.enable: "true"
       traefik.docker.network: dokploy-network
@@ -99,12 +122,14 @@ services:
     volumes:
       - ./llm-gw/default.conf.template:/etc/nginx/templates/default.conf.template:ro
     networks: [internal, egress]
+    logging: *logging
 
   # ---------- Owner-Accounts einmalig anlegen (läuft bei jedem Deploy, schadet nicht) ----------
   bootstrap:
     image: curlimages/curl:8.10.1
     restart: "no"
     networks: [internal]
+    logging: *logging
     environment:
       PW_GTM1: ${PW_GTM1:?PW_GTM1 fehlt}
       PW_GTM2: ${PW_GTM2:?PW_GTM2 fehlt}
@@ -123,13 +148,13 @@ services:
           name="$$1"; pw="$$2"; i=0
           until curl -sf "http://$$name:5678/rest/settings" >/dev/null 2>&1; do
             i=$$((i+1))
-            if [ "$$i" -gt 90 ]; then echo "$$name: Timeout"; return; fi
+            if [ "$$i" -gt 90 ]; then echo "$$(date '+%T') $$name: Timeout"; return; fi
             sleep 3
           done
           out=$$(curl -s -w ' [HTTP %{http_code}]' -H 'Content-Type: application/json' \
             -d "{\"email\":\"$$name@workshop.example\",\"firstName\":\"Workshop\",\"lastName\":\"$$name\",\"password\":\"$$pw\"}" \
             "http://$$name:5678/rest/owner/setup")
-          echo "$$name: $$out" | cut -c1-300
+          echo "$$(date '+%T') $$name: $$out" | cut -c1-300
         }
         setup gtm1 "$$PW_GTM1"
         setup gtm2 "$$PW_GTM2"
