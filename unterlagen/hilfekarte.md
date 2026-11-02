@@ -1,7 +1,7 @@
 # Hilfekarte: die fünf häufigsten Stolperstellen
 
 **1. Ausdrücke (Expressions)**
-Werte aus dem vorigen Node holst du mit `{{ $json.feld }}`. Das Feld muss genau so heißen wie in der Ausgabe (auch Groß- und Kleinschreibung: `Name` ist nicht `name`). Am einfachsten: das Feld aus dem Eingabe-Panel links in das Eingabefeld ziehen.
+Werte aus dem vorigen Node holst du mit `{{ $json.feld }}` oder, für frühere Nodes, `{{ $('Node-Name').item.json.feld }}`. Das Feld muss genau so heißen wie in der Ausgabe (auch Groß- und Kleinschreibung: `Name` ist nicht `name`). Am einfachsten: das Feld aus dem Eingabe-Panel links in das Eingabefeld ziehen.
 
 **2. Pinning**
 Drück auf das Pin-Symbol in der Ausgabe eines Nodes, dann bleiben seine Testdaten erhalten. Du musst das Formular nicht neu ausfüllen. Pins entfernen: noch einmal drücken.

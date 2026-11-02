@@ -79,55 +79,8 @@
     },
     {
       "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "a-absender",
-              "name": "absender",
-              "value": "={{ $json.Name }}",
-              "type": "string"
-            },
-            {
-              "id": "a-abteilung",
-              "name": "abteilung",
-              "value": "={{ $json.Abteilung }}",
-              "type": "string"
-            },
-            {
-              "id": "a-dringlichkeit",
-              "name": "dringlichkeit",
-              "value": "={{ $json.Dringlichkeit }}",
-              "type": "string"
-            },
-            {
-              "id": "a-nachricht",
-              "name": "nachricht",
-              "value": "={{ $json.Nachricht }}",
-              "type": "string"
-            },
-            {
-              "id": "a-eingegangen",
-              "name": "eingegangen",
-              "value": "={{ $now.toFormat('dd.MM.yyyy HH:mm') }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "s1",
-      "name": "Felder aufräumen",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        240,
-        0
-      ]
-    },
-    {
-      "parameters": {
         "promptType": "define",
-        "text": "=Fasse die folgende Nachricht in einem kurzen deutschen Satz zusammen:\n\n{{ $json.nachricht }}",
+        "text": "=Fasse die folgende Nachricht in einem kurzen deutschen Satz zusammen:\n\n{{ $json.Nachricht }}",
         "batching": {}
       },
       "id": "l1",
@@ -135,7 +88,7 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.9,
       "position": [
-        480,
+        240,
         0
       ]
     },
@@ -149,7 +102,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        500,
+        260,
         220
       ],
       "credentials": {
@@ -167,7 +120,7 @@
           "parameters": [
             {
               "name": "abteilung",
-              "value": "={{ $('Felder aufräumen').item.json.abteilung }}"
+              "value": "={{ $('Anfrage-Formular').item.json.Abteilung }}"
             }
           ]
         },
@@ -194,7 +147,7 @@
           "conditions": [
             {
               "id": "c1",
-              "leftValue": "={{ $('Felder aufräumen').item.json.dringlichkeit }}",
+              "leftValue": "={{ $('Anfrage-Formular').item.json.Dringlichkeit }}",
               "rightValue": "hoch",
               "operator": {
                 "type": "string",
@@ -222,7 +175,7 @@
             {
               "id": "a-antwort",
               "name": "antwort",
-              "value": "=DRINGEND: {{ $('Felder aufräumen').item.json.absender }}, deine Anfrage geht sofort an {{ $json.mitarbeiter[0].name }} ({{ $json.mitarbeiter[0].email }}).\nZusammenfassung: {{ $('Zusammenfassung (Bonus)').item.json.text }}",
+              "value": "=DRINGEND: {{ $('Anfrage-Formular').item.json.Name }}, deine Anfrage geht sofort an {{ $json.mitarbeiter[0].name }} ({{ $json.mitarbeiter[0].email }}).\nZusammenfassung: {{ $('Zusammenfassung (Bonus)').item.json.text }}",
               "type": "string"
             }
           ]
@@ -245,7 +198,7 @@
             {
               "id": "a-antwort",
               "name": "antwort",
-              "value": "=Danke {{ $('Felder aufräumen').item.json.absender }}, {{ $json.mitarbeiter[0].name }} ({{ $json.mitarbeiter[0].rolle }}) meldet sich in den nächsten Tagen.\nZusammenfassung: {{ $('Zusammenfassung (Bonus)').item.json.text }}",
+              "value": "=Danke {{ $('Anfrage-Formular').item.json.Name }}, {{ $json.mitarbeiter[0].name }} ({{ $json.mitarbeiter[0].rolle }}) meldet sich in den nächsten Tagen.\nZusammenfassung: {{ $('Zusammenfassung (Bonus)').item.json.text }}",
               "type": "string"
             }
           ]
@@ -280,9 +233,9 @@
     },
     {
       "parameters": {
-        "content": "## Lösung Aufgabe 1\nTrigger -> Edit Fields -> (Bonus: LLM) -> HTTP Request -> IF -> Antwort -> Formular beenden.",
+        "content": "## Lösung Aufgabe 1\nTrigger -> (Bonus: LLM-Zusammenfassung) -> HTTP Request -> IF -> Antwort (Edit Fields je Zweig) -> Form Ending.\nWerte aus dem Formular holst du nach dem HTTP Request mit `$('Anfrage-Formular').item.json.Name`.",
         "height": 140,
-        "width": 520,
+        "width": 760,
         "color": 4
       },
       "id": "1",
@@ -297,17 +250,6 @@
   ],
   "connections": {
     "Anfrage-Formular": {
-      "main": [
-        [
-          {
-            "node": "Felder aufräumen",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Felder aufräumen": {
       "main": [
         [
           {

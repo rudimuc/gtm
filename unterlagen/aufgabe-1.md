@@ -8,17 +8,18 @@
 
 1. **Formular testen.** Doppelklick auf den Trigger, *Execute step*, Formular ausfüllen und abschicken.
    Tipp: Danach den Trigger **anpinnen** (Pin-Symbol), dann musst du nicht jedes Mal neu ausfüllen.
-2. **Edit Fields** anhängen. Baue die Felder `absender`, `abteilung`, `dringlichkeit`, `nachricht`.
-   Beispiel für einen Wert: `{{ $json.Name }}`
-3. **HTTP Request** anhängen.
+2. **HTTP Request** anhängen.
    - Methode `GET`, URL `http://tools:5678/webhook/mitarbeiter`
-   - Query-Parameter `abteilung` mit dem Wert aus dem Formular
+   - Query-Parameter `abteilung` mit dem Wert `{{ $json.Abteilung }}` (Abteilung aus dem Formular)
    - Ausführen: Du siehst Mitarbeitende dieser Abteilung.
-4. **IF** anhängen: Ist `dringlichkeit` gleich `hoch`?
-5. **Zwei Edit Fields** (einer pro Zweig). Jeder baut ein Feld `antwort`, z. B.
-   - dringend: „Danke {{ $json.absender }}, wir melden uns heute noch bei dir. Ansprechperson: …“
+3. **IF** anhängen: Ist die Dringlichkeit gleich `hoch`?
+   Achtung: Nach dem HTTP Request ist `$json` die Antwort der API. Das Formular erreichst du mit `{{ $('Anfrage-Formular').item.json.Dringlichkeit }}`.
+4. **Zwei Edit Fields** (einer pro Zweig). Jeder baut ein Feld `antwort`, z. B.
+   - dringend: „Danke {{ $('Anfrage-Formular').item.json.Name }}, wir melden uns heute noch. Ansprechperson: {{ $json.mitarbeiter[0].name }}“
    - normal: „Danke, wir melden uns in den nächsten Tagen.“
-6. **Form** (Operation *Form Ending*) zeigt `{{ $json.antwort }}` an. Verbinde beide Zweige damit.
+5. **Form** (Operation *Form Ending*) an beide Zweige hängen.
+   - *Completion Title*: `Anfrage eingegangen`
+   - *Completion Message*: `{{ $json.antwort }}` (auf **Expression** umschalten)
 
 ## Fertig, wenn
 Du das Formular mit *hoch* und mit *normal* abschickst und jedes Mal die passende Antwort siehst.

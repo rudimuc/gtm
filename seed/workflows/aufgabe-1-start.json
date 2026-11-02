@@ -79,9 +79,9 @@
     },
     {
       "parameters": {
-        "content": "## Aufgabe 1: Anfrage bearbeiten (30 Min.)\nEin Formular nimmt Anfragen an. Der Workflow soll die passende Ansprechperson finden und je nach Dringlichkeit antworten.\n\n**So gehst du vor:**\n1. **Formular testen:** Doppelklick auf den Trigger, *Execute step* (oder unten *Execute workflow*), Formular ausfüllen und abschicken.\n2. **Edit Fields** anhängen: baue sauberes JSON mit `absender`, `abteilung`, `dringlichkeit`, `nachricht`. Beispiel: `{{ $json.Name }}`\n3. **HTTP Request** anhängen: `GET http://tools:5678/webhook/mitarbeiter`, Query-Parameter `abteilung` = die Abteilung aus dem Formular.\n4. **IF** anhängen: ist die Dringlichkeit `hoch`?\n5. Zwei **Edit Fields** (je ein Zweig) bauen den Antworttext in ein Feld `antwort`.\n6. **Form** (Operation *Form Ending*) zeigt `{{ $json.antwort }}` an.\n\n**Tipp:** Den Trigger einmal ausführen und *anpinnen* (Pin), dann musst du das Formular nicht jedes Mal ausfüllen.\nHilfe: die Hilfekarte, oder Rudi fragen.",
-        "height": 380,
-        "width": 520,
+        "content": "## Aufgabe 1: Anfrage bearbeiten (30 Min.)\nEin Formular nimmt Anfragen an. Der Workflow soll die passende Ansprechperson finden und je nach Dringlichkeit antworten.\n\n**So gehst du vor:**\n1. **Formular testen:** Doppelklick auf den Trigger, *Execute step* (oder unten *Execute workflow*), Formular ausfüllen und abschicken.\n2. **HTTP Request** anhängen: `GET http://tools:5678/webhook/mitarbeiter`, Query-Parameter `abteilung` = `{{ $json.Abteilung }}` (die Abteilung aus dem Formular).\n3. **IF** anhängen: ist die Dringlichkeit `hoch`? Nach dem HTTP Request ist `$json` die API-Antwort. Das Formular erreichst du mit `{{ $('Anfrage-Formular').item.json.Dringlichkeit }}`.\n4. Zwei **Edit Fields** (je ein Zweig) bauen den Antworttext in ein Feld `antwort`.\n5. **Form** (Operation *Form Ending*) an beide Zweige hängen. *Completion Title* z. B. `Anfrage eingegangen`, *Completion Message* = `{{ $json.antwort }}` (als Expression).\n\n**Tipp:** Den Trigger einmal ausführen und *anpinnen* (Pin), dann musst du das Formular nicht jedes Mal ausfüllen.\nHilfe: die Hilfekarte, oder Rudi fragen.",
+        "height": 480,
+        "width": 760,
         "color": 4
       },
       "id": "1",
@@ -90,7 +90,7 @@
       "typeVersion": 1,
       "position": [
         -60,
-        -420
+        -520
       ]
     },
     {
