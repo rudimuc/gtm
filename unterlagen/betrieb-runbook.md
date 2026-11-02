@@ -112,6 +112,14 @@ Betroffen ist nur der Container `llm-gw`. Die Gruppen-Instanzen merken nichts, d
 Marker `.seeded`). Neue/geänderte Workflows danach einzeln mit `import:workflow --input=...` (siehe 4.2) und bei Tool-Workflows mit `publish`
 plus Neustart nachliefern.
 
+**4.11 Ausführungen (Executions) löschen** (Workflows, Credentials und Konten bleiben):
+```bash
+./scripts/executions-loeschen.sh gtm3          # eine Instanz
+./scripts/executions-loeschen.sh alle          # alle laufenden Instanzen
+```
+Läuft im Repo-Ordner auf dem VPS, liest die Passwörter aus `.env` (oder aus `PW_GTMN` in der Umgebung). Ausgabe z. B. `gtm3: vorher 42, Löschen HTTP 200, nachher 0`.
+Das gibt Platz in der Datenbank frei, aber **kaum RAM**: n8n gibt Speicher des Prozesses nicht unbedingt zurück. Wenn eine Instanz RAM-hungrig geworden ist, hilft ein Neustart (4.1) deutlich mehr.
+
 ## 5. Nach dem Workshop
 - `pkill -f ram-tracking.sh`, `ram-container.csv` und `ram-host.csv` sichern. Die Spalte `prozent` zeigt die Auslastung des Container-Limits, `ram-host.csv` den Gesamt-RAM und den Swap.
 - OpenRouter: Verbrauch je Key ansehen, Keys deaktivieren oder löschen.
