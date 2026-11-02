@@ -1,6 +1,6 @@
 # Live-Demo (5 Minuten, Minute 5 bis 10)
 
-> Für die **ausführliche Einführung (30 Min.)** siehe `einfuehrung-30min.md`. Diese Seite ist die Kurzfassung (5 Min.).
+> Für die **ausführliche Einführung (30 Min.)** siehe `einfuehrung-30min.md`. Diese Seite ist die Kurzfassung für den Wiedereinstieg im Workshop (Minute 5 bis 10).
 
 Instanz: eigene, z. B. `gtm1`. Vorher: Workflow *Aufgabe 1: Lösung* importieren oder `solutions/aufgabe-1-loesung.json` per Drag-and-drop einfügen.
 

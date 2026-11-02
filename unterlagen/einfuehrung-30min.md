@@ -21,16 +21,16 @@ Die Einführung wird **live in einer eigenen Instanz** gebaut (z. B. `gtm1` oder
 - **Nicht zeigen:** Credentials anlegen (ist vorbereitet), Sub-Workflows im Detail, Code-Node, Community-Nodes.
 - **Vorher spielen:** Alles einmal in der Instanz durchlaufen lassen. Die Lösung liegt in `solutions/aufgabe-1-loesung.json` und kann als Plan B per Drag-and-drop in den Canvas gezogen werden.
 
-## Zeitplan des Workshops (75 Minuten): Achtung, es wird eng
-Mit 30 Minuten Einführung bleiben nur 45 Minuten für die Aufgaben. Vorschlag:
+## Gesamtablauf: 30 Minuten Einführung, danach 75 Minuten Workshop
 
-| Min. | Block |
+| Zeit | Block |
 |---|---|
-| 0 bis 5 | Ankommen, Zettel, Anmelden |
-| 5 bis 35 | Einführung (diese Seite) |
-| 35 bis 55 | Aufgabe 1 (Pflicht, 20 Min.) |
-| 55 bis 70 | Aufgabe 2 (Agent, 15 Min.: Tools verbinden und testen, der Systemprompt ist Zusatz) |
-| 70 bis 75 | Showcase: Ein bis zwei Gruppen zeigen ihr Ergebnis |
+| Einführung 0 bis 30 | Diese Seite. Am Ende bekommt jede Gruppe den Zugangszettel und die Hilfekarte. |
+| Workshop 0 bis 5 | Ankommen in den Gruppen, Anmelden bei der eigenen Instanz, Workflow *Aufgabe 1 (Start)* öffnen |
+| 5 bis 10 | Kurzer Neustart: Aufgabe 1 vorlesen, ein Beispiel zeigen (`demo-skript.md`, nur Minute 0 bis 2:30), Fragen |
+| 10 bis 40 | **Aufgabe 1** (Pflicht, 30 Min.) |
+| 40 bis 65 | **Aufgabe 2** (Agent, erwünscht, 25 Min.). Wer fertig ist, macht Aufgabe 3. |
+| 65 bis 75 | Showcase: ein bis zwei Gruppen zeigen ihr Ergebnis |
 
-Wenn Aufgabe 1 in 20 Minuten für gemischte Teams zu knapp ist, ist die Einführung der Ort zum Kürzen, nicht die Aufgabe. Eine Möglichkeit:
-Block "REST und Logik" (21 bis 26) auf 3 Minuten verkürzen und die Teilschritte in der Aufgabe führen lassen.
+Der Abschnitt "5 bis 10" ist ein Puffer. Wenn die Einführung gut sitzt, kannst du ihn verkürzen und Aufgabe 1 früher starten lassen.
+Liegt zwischen der Einführung und dem Workshop eine Pause, genügt für den Wiedereinstieg ein Satz: "Das Formular findet ihr in *Aufgabe 1 (Start)*."
