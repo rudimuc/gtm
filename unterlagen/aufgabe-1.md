@@ -15,8 +15,8 @@
 3. **IF** anhängen: Ist die Dringlichkeit gleich `hoch`?
    Achtung: Nach dem HTTP Request ist `$json` die Antwort der API. Das Formular erreichst du mit `{{ $('Anfrage-Formular').item.json.Dringlichkeit }}`.
 4. **Zwei Edit Fields** (einer pro Zweig). Jeder baut ein Feld `antwort`, z. B.
-   - dringend: „Danke {{ $('Anfrage-Formular').item.json.Name }}, wir melden uns heute noch. Ansprechperson: {{ $json.mitarbeiter[0].name }}“
-   - normal: „Danke, wir melden uns in den nächsten Tagen.“
+   - dringend: `Danke {{ $('Anfrage-Formular').item.json.Name }}, wir melden uns heute noch. Ansprechperson: {{ $json.mitarbeiter[0].name }}`
+   - normal: `Danke, wir melden uns in den nächsten Tagen.`
 5. **Form** (Operation *Form Ending*) an beide Zweige hängen.
    - *Completion Title*: `Anfrage eingegangen`
    - *Completion Message*: `{{ $json.antwort }}` (auf **Expression** umschalten)
