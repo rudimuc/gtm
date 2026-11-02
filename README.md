@@ -70,7 +70,7 @@ Die Gruppen tragen im **MCP Client Tool** ein: `http://tools:5678/mcp/workshop`
   plus Dokploy, Traefik und die nginx-Container kommen im Leerlauf auf ungefähr 3 bis 3,5 GB.
   Das ist eine Schätzung, kein Messwert.
 - Empfehlung: für den Workshop-Tag den VPS auf 8 GB hochstufen. Falls das nicht geht: 2 GB Swap,
-  `MEM_LIMIT` bei 512m lassen und vorher mit mehreren Browser-Tabs pro Instanz testen.
+  `MEM_LIMIT` bei 750m lassen und vorher mit mehreren Browser-Tabs pro Instanz testen.
 
 ## Bewusst nicht getestet (bitte beim ersten Deploy beachten)
 - Der Endpunkt `/rest/owner/setup` ist intern in n8n. Falls er in deiner Version abweicht, steht
